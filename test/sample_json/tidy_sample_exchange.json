@@ -1,0 +1,260 @@
+{
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "incoming": [
+        {
+            "channel_details": {
+                "connection_name": "192.168.252.111:52742 -> 192.168.252.71:5672",
+                "name": "192.168.252.111:52742 -> 192.168.252.71:5672 (1)",
+                "number": 1,
+                "peer_host": "192.168.252.111",
+                "peer_port": 52742
+            },
+            "stats": {
+                "confirm": 93852,
+                "confirm_details": {
+                    "avg": 93788.5,
+                    "avg_rate": 2.1166666666666667,
+                    "rate": 13.4,
+                    "samples": [
+                        {
+                            "sample": 93852,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 93725,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                },
+                "publish": 93852,
+                "publish_details": {
+                    "avg": 93788.5,
+                    "avg_rate": 2.1166666666666667,
+                    "rate": 13.4,
+                    "samples": [
+                        {
+                            "sample": 93852,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 93725,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "channel_details": {
+                "connection_name": "192.168.253.103:60404 -> 192.168.252.71:5672",
+                "name": "192.168.253.103:60404 -> 192.168.252.71:5672 (1)",
+                "number": 1,
+                "peer_host": "192.168.253.103",
+                "peer_port": 60404
+            },
+            "stats": {
+                "confirm": 196932,
+                "confirm_details": {
+                    "avg": 196860.0,
+                    "avg_rate": 2.4,
+                    "rate": 10.8,
+                    "samples": [
+                        {
+                            "sample": 196932,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 196788,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                },
+                "publish": 196932,
+                "publish_details": {
+                    "avg": 196860.0,
+                    "avg_rate": 2.4,
+                    "rate": 10.8,
+                    "samples": [
+                        {
+                            "sample": 196932,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 196788,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "channel_details": {
+                "connection_name": "192.168.253.101:60617 -> 192.168.252.72:5672",
+                "name": "192.168.253.101:60617 -> 192.168.252.72:5672 (1)",
+                "number": 1,
+                "peer_host": "192.168.253.101",
+                "peer_port": 60617
+            },
+            "stats": {
+                "confirm": 158640,
+                "confirm_details": {
+                    "avg": 158587.5,
+                    "avg_rate": 1.75,
+                    "rate": 11.0,
+                    "samples": [
+                        {
+                            "sample": 158640,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 158535,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                },
+                "publish": 158640,
+                "publish_details": {
+                    "avg": 158587.5,
+                    "avg_rate": 1.75,
+                    "rate": 11.0,
+                    "samples": [
+                        {
+                            "sample": 158640,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 158535,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "channel_details": {
+                "connection_name": "192.168.253.102:58024 -> 192.168.252.72:5672",
+                "name": "192.168.253.102:58024 -> 192.168.252.72:5672 (1)",
+                "number": 1,
+                "peer_host": "192.168.253.102",
+                "peer_port": 58024
+            },
+            "stats": {
+                "confirm": 172259,
+                "confirm_details": {
+                    "avg": 172208.0,
+                    "avg_rate": 1.7,
+                    "rate": 12.6,
+                    "samples": [
+                        {
+                            "sample": 172259,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 172157,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                },
+                "publish": 172259,
+                "publish_details": {
+                    "avg": 172208.5,
+                    "avg_rate": 1.6833333333333333,
+                    "rate": 12.6,
+                    "samples": [
+                        {
+                            "sample": 172259,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 172158,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "internal": false,
+    "message_stats": {
+        "confirm": 2528774,
+        "confirm_details": {
+            "avg": 2527616.5,
+            "avg_rate": 38.583333333333336,
+            "rate": 48.2,
+            "samples": [
+                {
+                    "sample": 2528774,
+                    "timestamp": 1420685700000
+                },
+                {
+                    "sample": 2526459,
+                    "timestamp": 1420685640000
+                }
+            ]
+        },
+        "publish_in": 2528774,
+        "publish_in_details": {
+            "avg": 2527616.5,
+            "avg_rate": 38.583333333333336,
+            "rate": 48.2,
+            "samples": [
+                {
+                    "sample": 2528774,
+                    "timestamp": 1420685700000
+                },
+                {
+                    "sample": 2526459,
+                    "timestamp": 1420685640000
+                }
+            ]
+        },
+        "publish_out": 2528774,
+        "publish_out_details": {
+            "avg": 2527616.5,
+            "avg_rate": 38.583333333333336,
+            "rate": 48.2,
+            "samples": [
+                {
+                    "sample": 2528774,
+                    "timestamp": 1420685700000
+                },
+                {
+                    "sample": 2526459,
+                    "timestamp": 1420685640000
+                }
+            ]
+        }
+    },
+    "name": "ceilometer-rabbit-publisher-exchange",
+    "outgoing": [
+        {
+            "queue": {
+                "name": "ceilometer-rabbit-publisher-queue",
+                "vhost": "/"
+            },
+            "stats": {
+                "publish": 2528774,
+                "publish_details": {
+                    "avg": 2527616.5,
+                    "avg_rate": 38.583333333333336,
+                    "rate": 48.2,
+                    "samples": [
+                        {
+                            "sample": 2528774,
+                            "timestamp": 1420685700000
+                        },
+                        {
+                            "sample": 2526459,
+                            "timestamp": 1420685640000
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "policy": "HA",
+    "type": "fanout",
+    "vhost": "/"
+}
