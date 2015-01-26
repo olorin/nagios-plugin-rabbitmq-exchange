@@ -20,7 +20,7 @@ library
   other-modules:     Nagios.Check.RabbitMQ.Options
                      Nagios.Check.RabbitMQ.Types
 
-  build-depends:     base >=4.7 && <4.8,
+  build-depends:     base >=4.5 && <4.8,
                      aeson,
                      optparse-applicative,
                      bytestring,
@@ -33,7 +33,7 @@ library
 
 executable check-rabbitmq-exchange
   main-is:             Main.hs
-  build-depends:       base >=4.7 && <4.8,
+  build-depends:       base >=4.5 && <4.8,
                        bytestring,
                        mtl,
                        check-rabbitmq-exchange,
