@@ -23,6 +23,7 @@ library
   build-depends:     base >=4.5 && <4.8,
                      aeson,
                      optparse-applicative,
+                     vector,
                      bytestring,
                      text,
                      nagios-check

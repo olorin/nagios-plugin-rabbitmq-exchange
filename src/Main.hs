@@ -12,12 +12,14 @@ import qualified Data.ByteString.Char8 as BSC
 import           Data.Maybe
 import           Data.Monoid
 import qualified Data.Text             as T
-import qualified Data.Vector           as V
 import           Nagios.Check.RabbitMQ
 import           Network.HTTP.Client
 import           System.Environment
 import           System.Exit
 import           System.Nagios.Plugin
+
+simplePerfDatum :: T.Text -> PerfValue -> NagiosPlugin()
+simplePerfDatum n p = addPerfDatum n p NullUnit Nothing Nothing Nothing Nothing
 
 main :: IO ()
 main = runNagiosPlugin $ do
@@ -28,20 +30,7 @@ main = runNagiosPlugin $ do
 
     manager <- liftIO $ newManager defaultManagerSettings
 
-    let baseUrl = concat [ "http://", hostname, "/api" ]
-
-    -- Get the length of the response at /api/connections (perfdata only)
-    let connUrl = concat [ baseUrl, "/connections" ]
-    connRequest <- applyBasicAuth username password <$> parseUrl connUrl
-
-    resp' <- liftIO $ httpLbs connRequest manager
-
-    let connCount = case eitherDecode (responseBody resp') of
-            Left e          -> fromIntegral 0
-	    Right (Array x) -> (fromIntegral (V.length x))
-
-    -- Full Exchange rates check
-    let rateUrl = concat [ baseUrl, "/exchanges/%2F/", exchange ]
+    let rateUrl = concat [ "http://", hostname, "/api/exchanges/%2F/", exchange ]
     authedRequest <- applyBasicAuth username password <$> parseUrl rateUrl
 
     let q_params = [ ("lengths_age",    Just "60")
@@ -56,10 +45,12 @@ main = runNagiosPlugin $ do
         Left e -> addResult Unknown $ T.pack ( "Exchange decode failed with: " ++ e )
         Right MessageDetail{..} -> do
 	    addResult OK "Exchange rate within bounds"
-	    addPerfDatum "rateConfirms"    (RealValue     rateConfirms)   NullUnit Nothing Nothing Nothing Nothing
-	    addPerfDatum "ratePublishIn"   (RealValue     ratePublishIn)  NullUnit Nothing Nothing Nothing Nothing
-	    addPerfDatum "ratePublishOut"  (RealValue     ratePublishOut) NullUnit Nothing Nothing Nothing Nothing
-	    addPerfDatum "connectionCount" (IntegralValue connCount) NullUnit Nothing Nothing Nothing Nothing
+
+	    simplePerfDatum "rateConfirms"        (RealValue rateConfirms)
+	    simplePerfDatum "ratePublishIn"       (RealValue ratePublishIn)
+	    simplePerfDatum "ratePublishOut"      (RealValue ratePublishOut)
+	    simplePerfDatum "connectionsIncoming" (IntegralValue (fromIntegral (length connectionsIncoming)))
+	    simplePerfDatum "connectionsOutgoing" (IntegralValue (fromIntegral (length connectionsOutgoing)))
 
 	    --- Check options, if available
 	    unless (rateConfirms `inBoundsOf` minWarning &&
