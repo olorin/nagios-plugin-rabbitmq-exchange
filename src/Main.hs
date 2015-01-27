@@ -45,15 +45,20 @@ main = runNagiosPlugin $ do
 	    simplePerfDatum "rateConfirms"        $ RealValue rateConfirms
 	    simplePerfDatum "ratePublishIn"       $ RealValue ratePublishIn
 	    simplePerfDatum "ratePublishOut"      $ RealValue ratePublishOut
-	    simplePerfDatum "connectionsIncoming" $ IntegralValue . fromIntegral $ length connectionsIncoming
-	    simplePerfDatum "connectionsOutgoing" $ IntegralValue . fromIntegral $ length connectionsOutgoing
+
+            let countIncoming = length connectionsIncoming
+            let countOutgoing = length connectionsOutgoing
+
+	    simplePerfDatum "connectionsIncoming" $ IntegralValue . fromIntegral $ countIncoming
+	    simplePerfDatum "connectionsOutgoing" $ IntegralValue . fromIntegral $ countOutgoing
 
 	    --- Check options, if available
-	    unless (rateConfirms `inBoundsOf` minWarning &&
-		    rateConfirms `inBoundsOf` maxWarning)
-		   (addResult Warning "Confirm Rate out of bounds")
-
-	    unless (rateConfirms `inBoundsOf` minCritical &&
-		    rateConfirms `inBoundsOf` maxCritical)
+	    unless (rateConfirms `inBoundsOf` minRate && rateConfirms `inBoundsOf` maxRate)
 		   (addResult Critical "Confirm Rate out of bounds")
+
+	    unless (fromIntegral countIncoming `inBoundsOf` minConn)
+	           (addResult Critical "Incoming connection rate out of bounds")
+
+	    unless (fromIntegral countOutgoing `inBoundsOf` minConn)
+	           (addResult Critical "Outgoing connection rate out of bounds")
 

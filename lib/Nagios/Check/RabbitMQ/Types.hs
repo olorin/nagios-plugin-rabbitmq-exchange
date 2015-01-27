@@ -26,12 +26,11 @@ maxThreshold Nothing  = NoThreshold
 maxThreshold (Just x) = MinThreshold x
 
 data CheckOptions = CheckOptions
-    { hostname    :: String
-    , exchange    :: String
-    , minWarning  :: Threshold
-    , minCritical :: Threshold
-    , maxWarning  :: Threshold
-    , maxCritical :: Threshold
+    { hostname :: String
+    , exchange :: String
+    , minRate  :: Threshold
+    , maxRate  :: Threshold
+    , minConn  :: Threshold
     } deriving Show
 
 data ConnectionDetail = ConnectionDetail
