@@ -56,9 +56,9 @@ main = runNagiosPlugin $ do
 	    unless (rateConfirms `inBoundsOf` minRate && rateConfirms `inBoundsOf` maxRate)
 		   (addResult Critical "Confirm Rate out of bounds")
 
-	    unless (fromIntegral countIncoming `inBoundsOf` minConn)
+	    unless (fromIntegral countIncoming `inBoundsOf` minIncomingConn)
 	           (addResult Critical "Incoming connection rate out of bounds")
 
-	    unless (fromIntegral countOutgoing `inBoundsOf` minConn)
+	    unless (fromIntegral countOutgoing `inBoundsOf` minOutgoingConn)
 	           (addResult Critical "Outgoing connection rate out of bounds")
 

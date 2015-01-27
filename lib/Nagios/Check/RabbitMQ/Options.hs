@@ -34,6 +34,10 @@ checkOptions = CheckOptions
         <> short 'R'
         <> metavar "MAXIMUM_RATE" )))
     <*> (minThreshold <$> optional ( option auto
-        ( long "minconn"
-        <> short 'c'
-        <> metavar "MINIMUM_CONNECTIONS" )))
+        ( long "minincomingconn"
+        <> short 'i'
+        <> metavar "MINIMUM_INCOMING_CONNECTIONS" )))
+    <*> (minThreshold <$> optional ( option auto
+        ( long "minoutgoingconn"
+        <> short 'o'
+        <> metavar "MINIMUM_OUTGOING_CONNECTIONS" )))
