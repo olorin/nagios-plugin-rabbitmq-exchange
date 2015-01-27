@@ -42,11 +42,11 @@ main = runNagiosPlugin $ do
         Right MessageDetail{..} -> do
 	    addResult OK "Exchange rate within bounds"
 
-	    simplePerfDatum "rateConfirms"        (RealValue rateConfirms)
-	    simplePerfDatum "ratePublishIn"       (RealValue ratePublishIn)
-	    simplePerfDatum "ratePublishOut"      (RealValue ratePublishOut)
-	    simplePerfDatum "connectionsIncoming" (IntegralValue (fromIntegral (length connectionsIncoming)))
-	    simplePerfDatum "connectionsOutgoing" (IntegralValue (fromIntegral (length connectionsOutgoing)))
+	    simplePerfDatum "rateConfirms"        $ RealValue rateConfirms
+	    simplePerfDatum "ratePublishIn"       $ RealValue ratePublishIn
+	    simplePerfDatum "ratePublishOut"      $ RealValue ratePublishOut
+	    simplePerfDatum "connectionsIncoming" $ IntegralValue . fromIntegral $ length connectionsIncoming
+	    simplePerfDatum "connectionsOutgoing" $ IntegralValue . fromIntegral $ length connectionsOutgoing
 
 	    --- Check options, if available
 	    unless (rateConfirms `inBoundsOf` minWarning &&
