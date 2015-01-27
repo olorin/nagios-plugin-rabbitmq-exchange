@@ -5,10 +5,6 @@ module Nagios.Check.RabbitMQ.Types where
 
 import           Control.Applicative
 import           Data.Aeson
-import qualified Data.ByteString.Char8 as BSC
-import           Data.Int
-import           Data.Text             (Text)
-import qualified Data.Text             as T
 import           GHC.Generics
 
 data Threshold = NoThreshold
@@ -30,22 +26,34 @@ maxThreshold Nothing  = NoThreshold
 maxThreshold (Just x) = MinThreshold x
 
 data CheckOptions = CheckOptions
-    { hostname    :: String
-    , exchange    :: String
-    , minWarning  :: Threshold
-    , minCritical :: Threshold
-    , maxWarning  :: Threshold
-    , maxCritical :: Threshold
+    { hostname         :: String
+    , exchange         :: String
+    , minRate          :: Threshold
+    , maxRate          :: Threshold
+    , minIncomingConn  :: Threshold
+    , minOutgoingConn  :: Threshold
     } deriving Show
 
+data ConnectionDetail = ConnectionDetail
+    { publish :: Double } deriving (Show, Generic)
+
+instance FromJSON ConnectionDetail where
+    parseJSON (Object o) = ConnectionDetail
+         <$> ((o .: "stats") >>= (.: "publish"))
+
 data MessageDetail = MessageDetail
-    { rateConfirms   :: Double
-    , ratePublishIn  :: Double
-    , ratePublishOut :: Double
+    { rateConfirms        :: Double
+    , ratePublishIn       :: Double
+    , ratePublishOut      :: Double
+    , connectionsIncoming :: [ConnectionDetail]
+    , connectionsOutgoing :: [ConnectionDetail]
     } deriving (Show,Generic)
 
+-- Average rate based on the query parameters from the api call
 instance FromJSON MessageDetail where
     parseJSON (Object o) = MessageDetail
-                        <$> ((o .: "message_stats") >>= (.: "confirm_details") >>= (.: "avg_rate"))
-                        <*> ((o .: "message_stats") >>= (.: "publish_in_details") >>= (.: "avg_rate"))
-                        <*> ((o .: "message_stats") >>= (.: "publish_out_details") >>= (.: "avg_rate"))
+	<$> ((o .: "message_stats") >>= (.: "confirm_details") >>= (.: "avg_rate"))
+	<*> ((o .: "message_stats") >>= (.: "publish_in_details") >>= (.: "avg_rate"))
+	<*> ((o .: "message_stats") >>= (.: "publish_out_details") >>= (.: "avg_rate"))
+	<*> (o .: "incoming")
+	<*> (o .: "outgoing")

@@ -4,44 +4,29 @@
 module Main where
 
 import           Control.Applicative
-import           Control.Exception
 import           Control.Monad
 import           Control.Monad.Trans
 import           Data.Aeson
 import qualified Data.ByteString.Char8 as BSC
-import           Data.Maybe
-import           Data.Monoid
 import qualified Data.Text             as T
-import qualified Data.Vector           as V
 import           Nagios.Check.RabbitMQ
 import           Network.HTTP.Client
 import           System.Environment
-import           System.Exit
 import           System.Nagios.Plugin
+
+simplePerfDatum :: T.Text -> PerfValue -> NagiosPlugin()
+simplePerfDatum n p = addPerfDatum n p NullUnit Nothing Nothing Nothing Nothing
 
 main :: IO ()
 main = runNagiosPlugin $ do
-    CheckOptions{..} <- liftIO $ parseOptions
+    CheckOptions{..} <- liftIO parseOptions
 
     username <- liftIO $ maybe "" BSC.pack <$> lookupEnv "RABBIT_USER"
     password <- liftIO $ maybe "" BSC.pack <$> lookupEnv "RABBIT_PASS"
 
     manager <- liftIO $ newManager defaultManagerSettings
 
-    let baseUrl = concat [ "http://", hostname, "/api" ]
-
-    -- Get the length of the response at /api/connections (perfdata only)
-    let connUrl = concat [ baseUrl, "/connections" ]
-    connRequest <- applyBasicAuth username password <$> parseUrl connUrl
-
-    resp' <- liftIO $ httpLbs connRequest manager
-
-    let connCount = case eitherDecode (responseBody resp') of
-            Left e          -> fromIntegral 0
-	    Right (Array x) -> (fromIntegral (V.length x))
-
-    -- Full Exchange rates check
-    let rateUrl = concat [ baseUrl, "/exchanges/%2F/", exchange ]
+    let rateUrl = concat [ "http://", hostname, "/api/exchanges/%2F/", exchange ]
     authedRequest <- applyBasicAuth username password <$> parseUrl rateUrl
 
     let q_params = [ ("lengths_age",    Just "60")
@@ -56,17 +41,24 @@ main = runNagiosPlugin $ do
         Left e -> addResult Unknown $ T.pack ( "Exchange decode failed with: " ++ e )
         Right MessageDetail{..} -> do
 	    addResult OK "Exchange rate within bounds"
-	    addPerfDatum "rateConfirms"    (RealValue     rateConfirms)   NullUnit Nothing Nothing Nothing Nothing
-	    addPerfDatum "ratePublishIn"   (RealValue     ratePublishIn)  NullUnit Nothing Nothing Nothing Nothing
-	    addPerfDatum "ratePublishOut"  (RealValue     ratePublishOut) NullUnit Nothing Nothing Nothing Nothing
-	    addPerfDatum "connectionCount" (IntegralValue connCount) NullUnit Nothing Nothing Nothing Nothing
+
+	    simplePerfDatum "rateConfirms"        $ RealValue rateConfirms
+	    simplePerfDatum "ratePublishIn"       $ RealValue ratePublishIn
+	    simplePerfDatum "ratePublishOut"      $ RealValue ratePublishOut
+
+            let countIncoming = length connectionsIncoming
+            let countOutgoing = length connectionsOutgoing
+
+	    simplePerfDatum "connectionsIncoming" $ IntegralValue . fromIntegral $ countIncoming
+	    simplePerfDatum "connectionsOutgoing" $ IntegralValue . fromIntegral $ countOutgoing
 
 	    --- Check options, if available
-	    unless (rateConfirms `inBoundsOf` minWarning &&
-		    rateConfirms `inBoundsOf` maxWarning)
-		   (addResult Warning "Confirm Rate out of bounds")
-
-	    unless (rateConfirms `inBoundsOf` minCritical &&
-		    rateConfirms `inBoundsOf` maxCritical)
+	    unless (rateConfirms `inBoundsOf` minRate && rateConfirms `inBoundsOf` maxRate)
 		   (addResult Critical "Confirm Rate out of bounds")
+
+	    unless (fromIntegral countIncoming `inBoundsOf` minIncomingConn)
+	           (addResult Critical "Incoming connection rate out of bounds")
+
+	    unless (fromIntegral countOutgoing `inBoundsOf` minOutgoingConn)
+	           (addResult Critical "Outgoing connection rate out of bounds")
 

@@ -1,13 +1,10 @@
 module Nagios.Check.RabbitMQ.Options where
 
 import           Nagios.Check.RabbitMQ.Types
-
 import           Options.Applicative
-
 
 parseOptions :: IO CheckOptions
 parseOptions = execParser optionParser
-
 
 optionParser :: ParserInfo CheckOptions
 optionParser =
@@ -29,18 +26,18 @@ checkOptions = CheckOptions
         <> short 'e'
         <> help "Name of the exchange to check")
     <*> (minThreshold <$> optional ( option auto
-        ( long "minwarning"
-        <> short 'w'
-        <> metavar "MINIMUM_WARN" )))
+        ( long "minrate"
+        <> short 'r'
+        <> metavar "MINIMUM_RATE" )))
+    <*> (maxThreshold <$> optional ( option auto
+        ( long "maxrate"
+        <> short 'R'
+        <> metavar "MAXIMUM_RATE" )))
     <*> (minThreshold <$> optional ( option auto
-        ( long "mincritical"
-        <> short 'c'
-        <> metavar "MINIMUM_CRIT" )))
-    <*> (maxThreshold <$> optional ( option auto
-        ( long "maxwarning"
-        <> short 'W'
-        <> metavar "MAXIMUM_WARN" )))
-    <*> (maxThreshold <$> optional ( option auto
-        ( long "maxcritical"
-        <> short 'C'
-        <> metavar "MAXIMUM_CRIT" )))
+        ( long "minincomingconn"
+        <> short 'i'
+        <> metavar "MINIMUM_INCOMING_CONNECTIONS" )))
+    <*> (minThreshold <$> optional ( option auto
+        ( long "minoutgoingconn"
+        <> short 'o'
+        <> metavar "MINIMUM_OUTGOING_CONNECTIONS" )))
