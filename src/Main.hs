@@ -4,18 +4,14 @@
 module Main where
 
 import           Control.Applicative
-import           Control.Exception
 import           Control.Monad
 import           Control.Monad.Trans
 import           Data.Aeson
 import qualified Data.ByteString.Char8 as BSC
-import           Data.Maybe
-import           Data.Monoid
 import qualified Data.Text             as T
 import           Nagios.Check.RabbitMQ
 import           Network.HTTP.Client
 import           System.Environment
-import           System.Exit
 import           System.Nagios.Plugin
 
 simplePerfDatum :: T.Text -> PerfValue -> NagiosPlugin()
@@ -23,7 +19,7 @@ simplePerfDatum n p = addPerfDatum n p NullUnit Nothing Nothing Nothing Nothing
 
 main :: IO ()
 main = runNagiosPlugin $ do
-    CheckOptions{..} <- liftIO $ parseOptions
+    CheckOptions{..} <- liftIO parseOptions
 
     username <- liftIO $ maybe "" BSC.pack <$> lookupEnv "RABBIT_USER"
     password <- liftIO $ maybe "" BSC.pack <$> lookupEnv "RABBIT_PASS"

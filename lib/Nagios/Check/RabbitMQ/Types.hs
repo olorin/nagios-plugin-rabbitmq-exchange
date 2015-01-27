@@ -5,10 +5,6 @@ module Nagios.Check.RabbitMQ.Types where
 
 import           Control.Applicative
 import           Data.Aeson
-import qualified Data.ByteString.Char8 as BSC
-import           Data.Int
-import           Data.Text             (Text)
-import qualified Data.Text             as T
 import           GHC.Generics
 
 data Threshold = NoThreshold
@@ -53,11 +49,10 @@ data MessageDetail = MessageDetail
     , connectionsOutgoing :: [ConnectionDetail]
     } deriving (Show,Generic)
 
-
 instance FromJSON MessageDetail where
     parseJSON (Object o) = MessageDetail
 	<$> ((o .: "message_stats") >>= (.: "confirm_details") >>= (.: "avg_rate"))
 	<*> ((o .: "message_stats") >>= (.: "publish_in_details") >>= (.: "avg_rate"))
 	<*> ((o .: "message_stats") >>= (.: "publish_out_details") >>= (.: "avg_rate"))
-	<*> ((o .: "incoming"))
-	<*> ((o .: "outgoing"))
+	<*> (o .: "incoming")
+	<*> (o .: "outgoing")
