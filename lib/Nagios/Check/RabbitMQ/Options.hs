@@ -36,4 +36,4 @@ checkOptions = CheckOptions
     <*> (minThreshold <$> optional ( option auto
         ( long "minconn"
         <> short 'c'
-        <> metavar "MAXIMUM_CONNECTIONS" )))
+        <> metavar "MINIMUM_CONNECTIONS" )))
