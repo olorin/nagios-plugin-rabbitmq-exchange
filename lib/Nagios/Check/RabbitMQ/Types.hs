@@ -49,6 +49,7 @@ data MessageDetail = MessageDetail
     , connectionsOutgoing :: [ConnectionDetail]
     } deriving (Show,Generic)
 
+-- Average rate based on the query parameters from the api call
 instance FromJSON MessageDetail where
     parseJSON (Object o) = MessageDetail
 	<$> ((o .: "message_stats") >>= (.: "confirm_details") >>= (.: "avg_rate"))
