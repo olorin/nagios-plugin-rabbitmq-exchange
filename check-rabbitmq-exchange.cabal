@@ -2,7 +2,7 @@ name:                check-rabbitmq-exchange
 version:             0.2.0
 synopsis:            Simple NRPE-based Nagios check for the length of a RabbitMQ queue
 description:         Simple NRPE-based Nagios check for the length of a RabbitMQ queue
-homepage:            https://github.com/anchor/haskell-nagios-checks
+homepage:            https://github.com/olorin/nagios-plugin-rabbitmq-exchange
 license:             BSD3
 license-file:        LICENSE
 author:              Anchor Engineering <engineering@anchor.com.au>
